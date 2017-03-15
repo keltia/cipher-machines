@@ -3,7 +3,6 @@ package machine
 import (
     "bytes"
     "strings"
-    "log"
     "fmt"
     "text/scanner"
 )
