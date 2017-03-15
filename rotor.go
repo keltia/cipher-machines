@@ -80,6 +80,9 @@ func (r *Rotor) HasWrapped() bool {
 }
 
 func NewRotor(str string, refl bool) (r *Rotor) {
+	if len(str) != RotorSize {
+		return nil
+	}
     r = &Rotor{
 		size: len(str),
 		rotor: make([]int, len(str)),

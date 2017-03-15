@@ -25,6 +25,9 @@ func TestNewRotor(t *testing.T) {
 
 	// Check content
 	assert.EqualValues(t, r.rotor, arI, "should be equal")
+
+	r = NewRotor("KJKJK", false)
+	assert.Nil(t, r, "should be nil")
 }
 
 func TestNewRotor_Refl(t *testing.T) {
@@ -148,6 +151,9 @@ func TestRotor_In(t *testing.T) {
 	r.Step()
 	v = r.In(textToInt["K"])
 	assert.EqualValues(t, v, textToInt["A"], "should be equal")
+
+	v = r.In(666)
+	assert.EqualValues(t, v, -1, "should be equal")
 }
 
 func TestRotor_Out(t *testing.T) {
