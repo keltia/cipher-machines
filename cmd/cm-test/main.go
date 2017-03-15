@@ -26,7 +26,8 @@ func main() {
 	    rII,
 	    rIII,
     }
-    e := machine.NewEnigma(3).Setup(rotors).AddReflector(RfB)
+    e, _ := machine.NewEnigma(3)
+    e.Setup(rotors).AddReflector(RfB)
     e.DumpState()
 
     e.SetPlugboard(PBS)
