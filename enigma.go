@@ -47,27 +47,30 @@ func (m *Enigma) Step() (*Enigma){
     return m
 }
 
-func (m *Enigma) Setup(rotors []string) (*Enigma){
+func (m *Enigma) Setup(rotors []string) error {
     // Only plain rotors, no reflector here
-    if len(rotors) != m.Size{
-		log.Fatalf("Bad size: %d", len(rotors))
+    if len(rotors) != m.Size {
+        return fmt.Errorf("Bad size: %d", len(rotors))
     }
 
     m.RotorSet = make([]*Rotor, m.Size)
 
     for i, r := range rotors {
+        if len(r) != RotorSize {
+            return fmt.Errorf("bad length %d should be 26", len(r))
+        }
 	    m.RotorSet[i] = NewRotor(r, false)
 		//log.Printf("%v\n", m.RotorSet[i])
     }
-	return m
+	return nil
 }
 
-func (m *Enigma) AddReflector(ref string) (*Enigma) {
+func (m *Enigma) AddReflector(ref string) error {
     m.Reflector = NewRotor(ref, true)
-    return m
+    return nil
 }
 
-func (m *Enigma) SetPlugboard(plug string) (*Enigma) {
+func (m *Enigma) SetPlugboard(plug string) error {
     var s scanner.Scanner
 
     s.Init(strings.NewReader(plug))
@@ -90,7 +93,7 @@ func (m *Enigma) SetPlugboard(plug string) (*Enigma) {
     }
 
     m.PlugBoard = sa
-    return m
+    return nil
 }
 
 func (m *Enigma) Out(i int) int {
