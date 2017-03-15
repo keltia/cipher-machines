@@ -59,7 +59,7 @@ func (r *Rotor) In(p int) (c int) {
 	    	return i
 		}
     }
-    return
+    return -1
 }
 
 func (r *Rotor) Rotate() {
