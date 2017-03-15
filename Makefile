@@ -9,3 +9,4 @@ all:	cm-test
 
 cm-test:	${SRCS}
 	go build ${OPTS} ./cmd/...
+	go test -v .
