@@ -35,7 +35,7 @@ func TestEnigma_AddReflector(t *testing.T) {
     e, _ := NewEnigma(3)
     e.AddReflector(RfB)
 
-    realPfA := *NewRotor(RfB, true)
+    realPfA := NewRotor(RfB, true)
     assert.Equal(t, e.Reflector, realPfA, "should be equal")
 
     arrayPfA := []int{24, 17, 20, 7, 16, 18, 11, 3, 15, 23, 13, 6, 14, 10, 12, 8, 4, 1, 5, 25, 2, 22, 21, 9, 0, 19}

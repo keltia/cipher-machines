@@ -35,8 +35,8 @@ const (
 // -- Enigma
 type Enigma struct {
     PlugBoard map[int]int   // plugboard settings
-    RotorSet  []Rotor // rotor set (3-4)
-    Reflector Rotor   // Enigma specific
+    RotorSet  []*Rotor // rotor set (3-4)
+    Reflector *Rotor   // Enigma specific
     Size      int     // number of rotors
 }
 
@@ -50,17 +50,17 @@ func (m *Enigma) Setup(rotors []string) (*Enigma){
 		log.Fatalf("Bad size: %d", len(rotors))
     }
 
-    m.RotorSet = make([]Rotor, m.Size)
+    m.RotorSet = make([]*Rotor, m.Size)
 
     for i, r := range rotors {
-	    m.RotorSet[i] = *NewRotor(r, false)
+	    m.RotorSet[i] = NewRotor(r, false)
 		//log.Printf("%v\n", m.RotorSet[i])
     }
 	return m
 }
 
 func (m *Enigma) AddReflector(ref string) (*Enigma) {
-    m.Reflector = *NewRotor(ref, true)
+    m.Reflector = NewRotor(ref, true)
     return m
 }
 
