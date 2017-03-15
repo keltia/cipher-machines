@@ -111,3 +111,15 @@ func TestRotor_Step_Refl(t *testing.T) {
 func TestRotor_Out(t *testing.T) {
 
 }
+
+func TestRotor_HasWrapped(t *testing.T) {
+	r := NewRotor(rI, false)
+
+	r.index = 3
+	r.Step()
+	assert.EqualValues(t, r.HasWrapped(), false, "should be false")
+
+	r.index = 25
+	r.Step()
+	assert.EqualValues(t, r.HasWrapped(), true, "should be true")
+}

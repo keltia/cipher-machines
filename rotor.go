@@ -11,6 +11,7 @@ type Rotor struct {
     size  int
 	notch int
 	refl  bool
+	wrap  bool
 }
 
 func (r *Rotor) testIndex(index int) bool {
@@ -35,7 +36,11 @@ func (r *Rotor) Step() int {
 	if r.refl {
 		return r.index
 	}
+	prev := r.index
     r.index = (r.index + 1) % r.size
+	if r.index < prev {
+		r.wrap = true
+	}
 	r.Rotate()
     return r.index
 }
@@ -64,6 +69,10 @@ func (r *Rotor) Rotate() {
 		r.rotor[i] = r.rotor[i + 1]
 	}
 	r.rotor[length - 1] = first
+}
+
+func (r *Rotor) HasWrapped() bool {
+	return r.wrap
 }
 
 func NewRotor(str string, refl bool) (r *Rotor) {
