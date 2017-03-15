@@ -54,12 +54,7 @@ func TestRotor_Rotate1(t *testing.T) {
 
 	r.Rotate()
 	assert.EqualValues(t, r, r1, "should be equal")
-
-	for i, v := range r1.rotor {
-		if r.rotor[i] != v {
-			t.Errorf("Invalid value at %d\nrI: %v\nr1: %v", i, r, r1)
-		}
-	}
+	assert.EqualValues(t, r.rotor, r1.rotor, "should be equal")
 }
 
 func TestRotor_Rotate2(t *testing.T) {
