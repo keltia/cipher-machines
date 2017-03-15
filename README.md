@@ -23,7 +23,7 @@
 ### TODO
 
 - more tests (and better ones!)
-- more actual code
+- more actual code (like Sigaba :))
 
 ### External Documentation
 
