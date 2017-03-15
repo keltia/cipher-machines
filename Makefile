@@ -14,3 +14,7 @@ cm-test:	$(SRCS)
 
 tests:	$(TESTS)
 	go test -v .
+
+push:
+	git push --all
+	git push --tags
