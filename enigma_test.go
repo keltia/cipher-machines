@@ -21,6 +21,37 @@ func TestNewEnigma(t *testing.T) {
     }, "should panic")
 }
 
+func TestEnigma_Setup(t *testing.T) {
+    var rotors = []string{
+        rI,
+        rII,
+        rIII,
+    }
+
+    e, _ := NewEnigma(3)
+    e.Setup(rotors)
+
+    assert.EqualValues(t, e.RotorSet[0], NewRotor(rI, false), "should be equal")
+    assert.EqualValues(t, e.RotorSet[1], NewRotor(rII, false), "should be equal")
+    assert.EqualValues(t, e.RotorSet[2], NewRotor(rIII, false), "should be equal")
+    assert.Nil(t, e.PlugBoard, "should be nil")
+    assert.Nil(t, e.Reflector, "should be nil")
+
+    rotors[0] = "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH"
+    err := e.Setup(rotors)
+    assert.Error(t, err, "should be in error")
+
+    rotors[0] = rVI
+    err = e.Setup(rotors)
+    assert.EqualValues(t, e.RotorSet[0], NewRotor(rVI, false), "should be equal")
+    assert.NoError(t, err, "should not be in error")
+
+    rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
+    err = e.Setup(rotors)
+    assert.Error(t, err, "should be in error")
+
+}
+
 func TestEnigma_SetPlugboard(t *testing.T) {
 
     e, _ := NewEnigma(3)
