@@ -35,6 +35,19 @@ func TestNewRotor_Refl(t *testing.T) {
 	assert.EqualValues(t, r.refl, true, "should be true")
 }
 
+func TestRotor_Start(t *testing.T) {
+	r1 := NewRotor(rI, false)
+	assert.EqualValues(t, r1.index, 0, "should be equal")
+
+	err := r1.Start(13)
+	assert.EqualValues(t, r1.index, 13, "should be equal")
+	assert.Nil(t, err, "no error")
+
+	err = r1.Start(42)
+	assert.Error(t, err, "should be an error")
+	assert.EqualValues(t, r1.index, 13, "should be equal")
+}
+
 func TestRotor_Rotate1(t *testing.T) {
 	r := NewRotor(rI, false)
 	r1 := NewRotor(rIr1, false)
