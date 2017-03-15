@@ -3,6 +3,7 @@ package main
 import (
     "github.com/keltia/cipher-machines"
     "fmt"
+    "log"
 )
 
 const (
@@ -27,7 +28,16 @@ func main() {
 	    rIII,
     }
     e, _ := machine.NewEnigma(3)
-    e.Setup(rotors).AddReflector(RfB)
+    err := e.Setup(rotors)
+    if err != nil {
+        log.Fatalf("Invalid Setup() with %#v", rotors)
+    }
+
+    err = e.AddReflector(RfB)
+    if err != nil {
+        log.Fatalf("Invalid AddReflector() with %#v", RfB)
+    }
+
     e.DumpState()
 
     e.SetPlugboard(PBS)
