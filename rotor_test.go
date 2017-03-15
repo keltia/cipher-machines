@@ -100,8 +100,8 @@ func TestRotor_Start_OOB(t *testing.T) {
 }
 
 func TestRotor_Step(t *testing.T) {
-	r := NewRotor(RfA, false)
-	r1 := NewRotor(RfA, false)
+	r := NewRotor(rI, false)
+	r1 := NewRotor(rI, false)
 
 	r.Step()
 	r1i := (r1.index + 1) % r1.size
