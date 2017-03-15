@@ -140,6 +140,12 @@ func TestRotor_HasWrapped(t *testing.T) {
 }
 
 func TestRotor_Out(t *testing.T) {
+	r := NewRotor(rI, false)
 
+	v := r.Out(0)
+	assert.EqualValues(t, v, textToInt["E"], "should be equal")
+	r.Step()
+	v = r.Out(0)
+	assert.EqualValues(t, v, textToInt["K"], "should be equal")
 }
 
