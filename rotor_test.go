@@ -139,13 +139,25 @@ func TestRotor_HasWrapped(t *testing.T) {
 	assert.EqualValues(t, r.HasWrapped(), true, "should be true")
 }
 
-func TestRotor_Out(t *testing.T) {
+func TestRotor_In(t *testing.T) {
+	// EKMFLGDQVZNTOWYHXUSPAIBRCJ
 	r := NewRotor(rI, false)
 
-	v := r.Out(0)
+	v := r.In(textToInt["E"])
+	assert.EqualValues(t, v, textToInt["A"], "should be equal")
+	r.Step()
+	v = r.In(textToInt["K"])
+	assert.EqualValues(t, v, textToInt["A"], "should be equal")
+}
+
+func TestRotor_Out(t *testing.T) {
+	// EKMFLGDQVZNTOWYHXUSPAIBRCJ
+	r := NewRotor(rI, false)
+
+	v := r.Out(textToInt["A"])
 	assert.EqualValues(t, v, textToInt["E"], "should be equal")
 	r.Step()
-	v = r.Out(0)
+	v = r.Out(textToInt["A"])
 	assert.EqualValues(t, v, textToInt["K"], "should be equal")
 }
 
