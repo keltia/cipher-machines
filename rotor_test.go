@@ -130,11 +130,11 @@ func TestRotor_Step26(t *testing.T) {
 func TestRotor_HasWrapped(t *testing.T) {
 	r := NewRotor(rI, false)
 
-	r.index = 3
+	r.Start(3)
 	r.Step()
 	assert.EqualValues(t, r.HasWrapped(), false, "should be false")
 
-	r.index = 25
+	r.Start(25)
 	r.Step()
 	assert.EqualValues(t, r.HasWrapped(), true, "should be true")
 }
