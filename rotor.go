@@ -32,6 +32,10 @@ func (r *Rotor) Start(index int) (err error) {
 }
 
 func (r *Rotor) Step() int {
+	// If previous step wrapped, then it should not do so now
+	if r.wrap {
+		r.wrap = false
+	}
 	// We do not move reflectors
 	if r.refl {
 		return r.index
