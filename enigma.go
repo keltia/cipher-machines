@@ -31,6 +31,10 @@ const (
     EnigmaMarine = 4
 )
 
+var (
+    RotorSize = len(rI)
+)
+
 // -- Enigma
 type Enigma struct {
     PlugBoard map[int]int   // plugboard settings
