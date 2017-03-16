@@ -191,6 +191,11 @@ func NewEnigma(size int) (m *Enigma, err error) {
     return
 }
 
-func (m *Enigma) DumpState() {
-    fmt.Printf("%#v\n-----\n", m)
+func (m *Enigma) DumpState(t bool) {
+    if t {
+        fmt.Printf("PB: %#v\nRefl: %#v\n", m.PlugBoard, m.Reflector)
+    }
+    if m.RotorSet != nil {
+        fmt.Printf("r0: %#v\nr1: %#v\nr2: %##v\n-----\n", m.RotorSet[0], m.RotorSet[1], m.RotorSet[2])
+    }
 }
