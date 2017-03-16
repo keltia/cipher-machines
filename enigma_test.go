@@ -52,6 +52,34 @@ func TestEnigma_Setup(t *testing.T) {
 
 }
 
+func TestEnigma_SetRotorSettings(t *testing.T) {
+    var rotors = []string{
+        rI,
+        rII,
+        rIII,
+    }
+
+    var set = []int{ 1, 4, 2}
+
+    e, _ := NewEnigma(3)
+    assert.Panics(t, func() {
+        e.SetRotorSettings(set)
+    }, "should panic")
+
+    err := e.Setup(rotors)
+    if err != nil {
+        t.Error(err)
+    }
+    e.SetPlugboard(PBS)
+    e.AddReflector(RfB)
+
+    e.SetRotorSettings(set)
+
+    assert.EqualValues(t, e.RotorSet[0].index, 1, "should be equal")
+    assert.EqualValues(t, e.RotorSet[1].index, 4, "should be equal")
+    assert.EqualValues(t, e.RotorSet[2].index, 2, "should be equal")
+}
+
 func TestEnigma_SetPlugboard(t *testing.T) {
 
     e, _ := NewEnigma(3)

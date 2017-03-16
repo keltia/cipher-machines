@@ -47,6 +47,17 @@ func (m *Enigma) Step() (*Enigma){
     return m
 }
 
+func (m *Enigma) SetRotorSettings(set []int) (err error) {
+    if len(set) != len(m.RotorSet) {
+        err = fmt.Errorf("Mismatch in rotors number: %d vs %d", len(set), len(m.RotorSet))
+    }
+    for i, v := range set {
+        m.RotorSet[i].Start(v)
+    }
+    err = nil
+    return
+}
+
 func (m *Enigma) Setup(rotors []string) error {
     // Only plain rotors, no reflector here
     if len(rotors) != m.Size {
