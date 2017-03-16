@@ -38,13 +38,8 @@ func main() {
         log.Fatalf("Invalid AddReflector() with %#v", RfB)
     }
 
-    e.DumpState()
-
     e.SetPlugboard(PBS)
-    e.DumpState()
-
-    e.Step()
-    e.DumpState()
+    e.DumpState(true)
 
     plain := "AAAAA"
     want := "BDZGO"
