@@ -6,9 +6,9 @@ import (
 type Machine interface {
 	Step()
 	Index()
-	Setup()
-	Encrypt()
-	Decrypt()
+	Setup() error
+	Encrypt(str string) string
+	Decrypt(str string) string
 }
 
 //
