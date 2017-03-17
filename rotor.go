@@ -32,6 +32,15 @@ func (r *Rotor) Start(index int) (err error) {
 	return
 }
 
+func (r *Rotor) turn(index int) (ret int, wrap bool) {
+	prev := index
+	index = (index + 1) % r.size
+	if index < prev {
+		wrap = true
+	}
+	return index, wrap
+}
+
 func (r *Rotor) Step() int {
 	// If previous step wrapped, then it should not do so now
 	if r.wrap {
@@ -41,12 +50,9 @@ func (r *Rotor) Step() int {
 	if r.refl {
 		return r.index
 	}
-	prev := r.index
-    r.index = (r.index + 1) % r.size
-	if r.index < prev {
-		r.wrap = true
-	}
+	r.index, r.wrap = r.turn(r.index)
 	r.Rotate()
+	r.notch, _ = r.turn(r.notch)
     return r.index
 }
 
