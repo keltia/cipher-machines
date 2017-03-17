@@ -78,7 +78,7 @@ func (m *Enigma) SetRotorSettings(set []int) (err error) {
     return
 }
 
-func (m *Enigma) Setup(rotors []string) error {
+func (m *Enigma) Setup(rotors []string) (err error) {
     // Only plain rotors, no reflector here
     if len(rotors) != m.Size {
         return fmt.Errorf("Bad size: %d", len(rotors))
@@ -87,18 +87,18 @@ func (m *Enigma) Setup(rotors []string) error {
     m.RotorSet = make([]*Rotor, m.Size)
 
     for i, r := range rotors {
-        if len(r) != RotorSize {
+        if len(r) != RotorSize + 1 {
             return fmt.Errorf("bad length %d should be 26", len(r))
         }
-	    m.RotorSet[i] = NewRotor(r, false)
+	    m.RotorSet[i], err = NewRotor(r, false)
 		//log.Printf("%v\n", m.RotorSet[i])
     }
 	return nil
 }
 
-func (m *Enigma) AddReflector(ref string) error {
-    m.Reflector = NewRotor(ref, true)
-    return nil
+func (m *Enigma) AddReflector(ref string) (err error) {
+    m.Reflector, err = NewRotor(ref, true)
+    return err
 }
 
 func (m *Enigma) SetPlugboard(plug string) error {
