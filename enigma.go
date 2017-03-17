@@ -67,6 +67,27 @@ func (m *Enigma) Step() (*Enigma){
     return m
 }
 
+// Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
+// the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
+// XXX assume single notch rotors
+func (m *Enigma) NewStep() (*Enigma){
+    // New mode, take the notches into account
+
+    // if this is a 4-wheel machine, the foremost one (aka the 4th) does not move.
+    r0 := m.RotorSet[0]
+    r1 := m.RotorSet[1]
+    r2 := m.RotorSet[2]
+
+    r0.Step()
+    if r0.index == r1.notch {
+        r1.Step()
+        if r1.index == r2.notch {
+            r2.Step()
+        }
+    }
+    return m
+}
+
 func (m *Enigma) SetRotorSettings(set []int) (err error) {
     if len(set) != len(m.RotorSet) {
         err = fmt.Errorf("Mismatch in rotors number: %d vs %d", len(set), len(m.RotorSet))
