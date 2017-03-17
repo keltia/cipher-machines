@@ -10,13 +10,13 @@ import (
 const (
     // Official rotors
     // cf. https://en.wikipedia.org/wiki/Enigma_rotor_details
-
-    rI   = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
-    rII  = "AJDKSIRUXBLHWTMCQGZNPYFVOE"
-    rIII = "BDFHJLCPRTXVZNYEIWGAKMUSQO"
-    rIV  = "ESOVPZJAYQUIRHXLNFTGKDCMWB"
-    rV   = "VZBRGITYUPSDNHLXAWMJQOFECK"
-    rVI  = "JPGVOUMFYQBENHZRDKASXLICTW"
+    //      ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    rI   = "EKMFLGDQVZNTOWYHX/USPAIBRCJ"
+    rII  = "AJDKS/IRUXBLHWTMCQGZNPYFVOE"
+    rIII = "BDFHJLCPRTXVZNYEIWGAKM/USQO"
+    rIV  = "ESOVPZJAYQ/UIRHXLNFTGKDCMWB"
+    rV   = "VZBRGITYUPSDNHLXAWMJQOFECK/"
+    rVI  = "JPGVOUMFYQBENHZRDKASXLICTW/"    // special, has notch in M too
 
     // Reflectors
     RfA   = "EJMZALYXVBWFCRQUONTSPIKHGD"
@@ -29,10 +29,9 @@ const (
     // Enigma types
     EnigmaStd    = 3
     EnigmaMarine = 4
-)
 
-var (
-    RotorSize = len(rI)
+    // Misc
+    RotorSize = 26
 )
 
 // -- Enigma
