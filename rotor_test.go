@@ -6,43 +6,63 @@ import (
 )
 
 const (
-	rIr1 = "KMFLGDQVZNTOWYHXUSPAIBRCJE"
-	rIr2 = "MFLGDQVZNTOWYHXUSPAIBRCJEK"
+	//      ABCDEFGHIJKLMNOPQRSTUVWXYZ
+	rIr1 = "KMFLGDQVZNTOWYHXU/SPAIBRCJE"
+	rIr2 = "MFLGDQVZNTOWYHXUS/PAIBRCJEK"
 )
 
 func TestNewRotor(t *testing.T) {
-	r := NewRotor(rI, false)
-	
-	assert.EqualValues(t, r.size, len(rI), "they should be the same")
-	assert.EqualValues(t, len(r.rotor),len(rI), "they should be of the same length")
+	var notch int
+
+	r, err := NewRotor(rI, false)
+
+	assert.NoError(t, err,"should be no error")
+	assert.EqualValues(t, r.size, len(rI) - 1, "they should be the same")
+	assert.EqualValues(t, len(r.rotor),len(rI) - 1, "they should be of the same length")
 	assert.EqualValues(t, r.refl, false, "should be false")
 
 	// What we want
-	arI := make([]int, len(rI))
-	for i, v := range rI {
-		arI[i] = textToInt[string(v)]
+	arI := make([]int, len(rI) - 1)
+	var i = 0
+	for _, v := range rI {
+		if string(v) == "/" {
+			notch = i
+		} else {
+			arI[i] = textToInt[string(v)]
+			i++
+		}
 	}
 
 	// Check content
+	assert.EqualValues(t, len(r.rotor), RotorSize, "should be equal")
 	assert.EqualValues(t, r.rotor, arI, "should be equal")
+	assert.EqualValues(t, r.notch, notch, "should be equal")
 
-	r = NewRotor("KJKJK", false)
-	assert.Nil(t, r, "should be nil")
+	r, err = NewRotor("KJKJK", false)
+	assert.Error(t, err, "should be error")
+	assert.NotNil(t, r, "r not null")
+
+	r, err = NewRotor("KJKJK", true)
+	assert.Error(t, err, "should be error")
+	assert.NotNil(t, r, "r not null")
 }
 
 func TestNewRotor_Refl(t *testing.T) {
-	r := NewRotor(RfA, true)
+	r, err := NewRotor(RfA, true)
 
-	assert.EqualValues(t, r.size, len(rI), "they should be the same")
-	assert.EqualValues(t, len(r.rotor),len(rI), "they should be of the same length")
+	assert.NoError(t, err,"should be no error")
+	assert.NotNil(t, r, "r not null")
+	assert.EqualValues(t, r.size, len(RfA), "they should be the same")
+	assert.EqualValues(t, len(r.rotor),len(RfA), "they should be of the same length")
 	assert.EqualValues(t, r.refl, true, "should be true")
 }
 
 func TestRotor_Start(t *testing.T) {
-	r1 := NewRotor(rI, false)
+	r1, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
 	assert.EqualValues(t, r1.index, 0, "should be equal")
 
-	err := r1.Start(13)
+	err = r1.Start(13)
 	assert.EqualValues(t, r1.index, 13, "should be equal")
 	assert.Nil(t, err, "no error")
 
@@ -52,8 +72,11 @@ func TestRotor_Start(t *testing.T) {
 }
 
 func TestRotor_Rotate1(t *testing.T) {
-	r := NewRotor(rI, false)
-	r1 := NewRotor(rIr1, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
+
+	r1, err := NewRotor(rIr1, false)
+	assert.NoError(t, err,"should be no error")
 
 	r.Rotate()
 	assert.EqualValues(t, r, r1, "should be equal")
@@ -61,9 +84,15 @@ func TestRotor_Rotate1(t *testing.T) {
 }
 
 func TestRotor_Rotate2(t *testing.T) {
-	r := NewRotor(rI, false)
-	r1 := NewRotor(rIr1, false)
-	r2 := NewRotor(rIr2, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
+
+	r1, err := NewRotor(rIr1, false)
+	assert.NoError(t, err,"should be no error")
+
+	r2, err := NewRotor(rIr2, false)
+	assert.NoError(t, err,"should be no error")
+
 
 	r.Rotate()
 	assert.EqualValues(t, r, r1, "should be equal")
@@ -78,33 +107,44 @@ func TestRotor_Rotate2(t *testing.T) {
 }
 
 func TestRotor_Rotate_Refl(t *testing.T) {
-	r := NewRotor(RfA, true)
-	r1 := NewRotor(RfA, true)
+	r, err := NewRotor(RfA, true)
+	assert.NoError(t, err,"should be no error")
+
+	r1, err := NewRotor(RfA, true)
 	r.Rotate()
 	assert.EqualValues(t, r, r1, "should be equal for a reflector")
 }
 
 func TestRotor_Start1(t *testing.T) {
-	r := NewRotor(rI, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
+
 	r.Start(21)
 	assert.Equal(t, r.index, 21, "should be equal")
 }
 
 func TestRotor_Start2(t *testing.T) {
-	r := NewRotor(rI, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
+
 	_ = r.Start(21)
 	assert.Equal(t, r.index, 21, "should be equal")
 }
 
 func TestRotor_Start_OOB(t *testing.T) {
-	r := NewRotor(rI, false)
-	err := r.Start(42)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
+
+	err = r.Start(42)
 	assert.Error(t, err,"index out of bounds")
 }
 
 func TestRotor_Step(t *testing.T) {
-	r := NewRotor(rI, false)
-	r1 := NewRotor(rI, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
+
+	r1, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
 
 	r.Step()
 	r1i := (r1.index + 1) % r1.size
@@ -112,15 +152,20 @@ func TestRotor_Step(t *testing.T) {
 }
 
 func TestRotor_Step_Refl(t *testing.T) {
-	r := NewRotor(RfA, true)
-	r1 := NewRotor(RfA, true)
+	r, err := NewRotor(RfA, true)
+	assert.NoError(t, err,"should be no error")
+
+	r1, err := NewRotor(RfA, true)
+	assert.NoError(t, err,"should be no error")
+
 
 	r.Step()
 	assert.EqualValues(t, r.index, r1.index, "index is invariant for reflectors")
 }
 
 func TestRotor_Step26(t *testing.T) {
-	r := NewRotor(rI, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
 
 	for _, _ = range r.rotor {
 		r.Step()
@@ -131,7 +176,8 @@ func TestRotor_Step26(t *testing.T) {
 }
 
 func TestRotor_HasWrapped(t *testing.T) {
-	r := NewRotor(rI, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
 
 	r.Start(3)
 	r.Step()
@@ -144,7 +190,8 @@ func TestRotor_HasWrapped(t *testing.T) {
 
 func TestRotor_In(t *testing.T) {
 	// EKMFLGDQVZNTOWYHXUSPAIBRCJ
-	r := NewRotor(rI, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
 
 	v := r.In(textToInt["E"])
 	assert.EqualValues(t, v, textToInt["A"], "should be equal")
@@ -158,7 +205,8 @@ func TestRotor_In(t *testing.T) {
 
 func TestRotor_Out(t *testing.T) {
 	// EKMFLGDQVZNTOWYHXUSPAIBRCJ
-	r := NewRotor(rI, false)
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err,"should be no error")
 
 	v := r.Out(textToInt["A"])
 	assert.EqualValues(t, v, textToInt["E"], "should be equal")

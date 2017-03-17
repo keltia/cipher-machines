@@ -2,6 +2,7 @@ package machine
 
 import (
 	"fmt"
+	"strings"
 )
 
 // -- Rotor
@@ -79,19 +80,39 @@ func (r *Rotor) HasWrapped() bool {
 	return r.wrap
 }
 
-func NewRotor(str string, refl bool) (r *Rotor) {
-	if len(str) != RotorSize {
-		return nil
+func NewRotor(str string, refl bool) (r *Rotor, err error) {
+	// Plain rotor descriptions have one or two more bytes because of the notches
+	// Reflectors' are just RotorSize
+	if refl {
+		if len(str) != RotorSize ||
+			strings.ContainsRune(str, '/') {
+			return &Rotor{}, fmt.Errorf("bad description for reflector")
+		}
+	} else {
+		// Check for notches
+		if !strings.ContainsRune(str, '/') &&
+			len(str) != RotorSize + 1 {
+			return &Rotor{}, fmt.Errorf("bad description for rtor")
+		}
 	}
     r = &Rotor{
-		size: len(str),
-		rotor: make([]int, len(str)),
+		size: RotorSize,
+		rotor: make([]int, RotorSize),
 		refl: refl,
 	}
 
-    for i, c := range str {
-		r.rotor[i] = textToInt[string(c)]
+	// Transform data
+	var i = 0
+    for _, c := range str {
+		// Identify the notch that make the next rotor advance
+		if c == '/' {
+			r.notch = i
+		} else {
+			r.rotor[i] = textToInt[string(c)]
+			i++
+		}
     }
+	err = nil
     return
 }
 
