@@ -240,3 +240,17 @@ func (m *Enigma) DumpState(t bool) {
         fmt.Printf("r0: %#v\nr1: %#v\nr2: %##v\n-----\n", m.RotorSet[0], m.RotorSet[1], m.RotorSet[2])
     }
 }
+
+func (m *Enigma) DumpIndex() {
+    var ri3 string
+
+    if m.Size == EnigmaMarine {
+        ri3 = intToText[m.RotorSet[3].index]
+    } else {
+        ri3 = "-"
+    }
+    ri2 := intToText[m.RotorSet[2].index]
+    ri1 := intToText[m.RotorSet[1].index]
+    ri0 := intToText[m.RotorSet[0].index]
+    fmt.Printf("%s%s%s%s\n", ri3, ri2, ri1, ri0)
+}
