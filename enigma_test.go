@@ -29,21 +29,28 @@ func TestEnigma_Setup(t *testing.T) {
     }
 
     e, _ := NewEnigma(3)
-    e.Setup(rotors)
+    err := e.Setup(rotors)
 
-    assert.EqualValues(t, e.RotorSet[0], NewRotor(rI, false), "should be equal")
-    assert.EqualValues(t, e.RotorSet[1], NewRotor(rII, false), "should be equal")
-    assert.EqualValues(t, e.RotorSet[2], NewRotor(rIII, false), "should be equal")
+    rrI, _   := NewRotor(rI, false)
+    rrII, _  := NewRotor(rII, false)
+    rrIII, _ := NewRotor(rIII, false)
+
+    assert.NoError(t, err, "should be ok")
+    assert.EqualValues(t, e.RotorSet[0], rrI, "should be equal")
+    assert.EqualValues(t, e.RotorSet[1], rrII, "should be equal")
+    assert.EqualValues(t, e.RotorSet[2], rrIII, "should be equal")
+
     assert.Nil(t, e.PlugBoard, "should be nil")
     assert.Nil(t, e.Reflector, "should be nil")
 
     rotors[0] = "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH"
-    err := e.Setup(rotors)
+    err = e.Setup(rotors)
     assert.Error(t, err, "should be in error")
 
     rotors[0] = rVI
     err = e.Setup(rotors)
-    assert.EqualValues(t, e.RotorSet[0], NewRotor(rVI, false), "should be equal")
+    rrVI, _ := NewRotor(rVI, false)
+    assert.EqualValues(t, e.RotorSet[0], rrVI, "should be equal")
     assert.NoError(t, err, "should not be in error")
 
     rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
@@ -91,14 +98,26 @@ func TestEnigma_SetPlugboard(t *testing.T) {
 }
 
 func TestEnigma_AddReflector(t *testing.T) {
+    var rotors = []string{
+        rI,
+        rII,
+        rIII,
+    }
+
     e, _ := NewEnigma(3)
-    e.AddReflector(RfB)
+    err := e.Setup(rotors)
+    assert.NoError(t, err, "no error")
+    assert.NotNil(t, e.RotorSet, "rs not null")
 
-    realPfA := NewRotor(RfB, true)
-    assert.Equal(t, e.Reflector, realPfA, "should be equal")
+    err = e.AddReflector(RfB)
+    assert.NoError(t, err, "no error")
+    assert.NotNil(t, e.Reflector, "refl not null")
 
-    arrayPfA := []int{24, 17, 20, 7, 16, 18, 11, 3, 15, 23, 13, 6, 14, 10, 12, 8, 4, 1, 5, 25, 2, 22, 21, 9, 0, 19}
-    assert.EqualValues(t, e.Reflector.rotor, arrayPfA, "should be equal")
+    realPfB, _ := NewRotor(RfB, true)
+    assert.Equal(t, e.Reflector, realPfB, "should be equal")
+
+    arrayPfB := []int{24, 17, 20, 7, 16, 18, 11, 3, 15, 23, 13, 6, 14, 10, 12, 8, 4, 1, 5, 25, 2, 22, 21, 9, 0, 19}
+    assert.EqualValues(t, e.Reflector.rotor, arrayPfB, "should be equal")
 }
 
 func TestEnigma_Encrypt(t *testing.T) {
