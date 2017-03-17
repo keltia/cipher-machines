@@ -21,12 +21,36 @@ const (
     PBS   = "EJOYIVAQKWFXMTPSLUBD"
 )
 
-func main() {
-    var rotors = []string{
-	    rI,
-	    rII,
-	    rIII,
+var rotors = []string{
+    rI,
+    rII,
+    rIII,
+}
+
+func testNewStep() {
+    e, _ := machine.NewEnigma(3)
+    err := e.Setup(rotors)
+    if err != nil {
+        log.Fatalf("Invalid Setup() with %#v", rotors)
     }
+
+    e.SetRotorSettings([]int{20, 0,0})
+    e.DumpState(false)
+    e.DumpIndex()
+    e.NewStep()
+    e.DumpIndex()
+    e.NewStep()
+    e.DumpIndex()
+    e.NewStep()
+    e.DumpIndex()
+    e.NewStep()
+    e.DumpIndex()
+    e.NewStep()
+    e.DumpIndex()
+    e.NewStep()
+}
+
+func main() {
     e, _ := machine.NewEnigma(3)
     err := e.Setup(rotors)
     if err != nil {
@@ -46,4 +70,6 @@ func main() {
 
     cipher := e.Encrypt(plain)
     fmt.Printf("Plain: %s\nCipher: %s\nWant: %s\n", plain, cipher, want)
+
+    testNewStep()
 }
