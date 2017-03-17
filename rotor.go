@@ -86,13 +86,13 @@ func NewRotor(str string, refl bool) (r *Rotor, err error) {
 	if refl {
 		if len(str) != RotorSize ||
 			strings.ContainsRune(str, '/') {
-			return &Rotor{}, fmt.Errorf("bad description for reflector")
+			return &Rotor{}, fmt.Errorf("bad description for reflector: %s", str)
 		}
 	} else {
 		// Check for notches
 		if !strings.ContainsRune(str, '/') &&
 			len(str) != RotorSize + 1 {
-			return &Rotor{}, fmt.Errorf("bad description for rtor")
+			return &Rotor{}, fmt.Errorf("bad description for rtor: %s", str)
 		}
 	}
     r = &Rotor{
