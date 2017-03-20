@@ -216,7 +216,7 @@ func (m *Enigma) Encrypt(text string) (cipher string) {
 
 		fmt.Printf(" - cipher: %s\n", c)
 		str.WriteString(c)
-		m.Step()
+		m.NewStep()
 	}
 	cipher = str.String()
 	return
