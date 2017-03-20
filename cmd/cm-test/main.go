@@ -41,24 +41,24 @@ func testNewStep() {
 	e.DumpState(false)
 	e.DumpIndex()
 	fmt.Println("----")
-	e.NewStep()		// normal step
+	e.Step() // normal step
 	e.DumpIndex()
-	e.NewStep()		// notch reached
+	e.Step() // notch reached
 	e.DumpIndex()
-	e.NewStep()		// normal step
+	e.Step() // normal step
 	e.DumpIndex()
 
 	fmt.Println("----- double step")
 	e.SetRotorSettings([]int{0, 3, 20})
 	e.DumpIndex()
 	fmt.Println("----")
-	e.NewStep()		// normal step
+	e.Step() // normal step
 	e.DumpIndex()
-	e.NewStep()		// right-most step
+	e.Step() // right-most step
 	e.DumpIndex()
-	e.NewStep()		// left-most will step and middle is double step
+	e.Step() // left-most will step and middle is double step
 	e.DumpIndex()
-	e.NewStep()		// normal step
+	e.Step() // normal step
 	e.DumpIndex()
 }
 

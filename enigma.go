@@ -48,7 +48,7 @@ type Enigma struct {
 // Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
 // the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
 // XXX assume single notch rotors
-func (m *Enigma) NewStep() *Enigma {
+func (m *Enigma) Step() *Enigma {
 	// New mode, take the notches into account
 
 	// if this is a 4-wheel machine, the foremost one (aka the 4th) does not move.
@@ -191,7 +191,7 @@ func (m *Enigma) Encrypt(text string) (cipher string) {
 
 		fmt.Printf(" - cipher: %s\n", c)
 		str.WriteString(c)
-		m.NewStep()
+		m.Step()
 	}
 	cipher = str.String()
 	return
