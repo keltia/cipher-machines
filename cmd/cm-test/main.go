@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	//      ABCDEFGHIJKLMNOPQRSTUVWXYZ
     rI   = "EKMFLGDQVZNTOWYHX/USPAIBRCJ"
     rII  = "AJDKS/IRUXBLHWTMCQGZNPYFVOE"
     rIII = "BDFHJLCPRTXVZNYEIWGAKM/USQO"
@@ -23,8 +24,8 @@ const (
 
 var rotors = []string{
     rI,
-    rII,
-    rIII,
+	rII,
+	rIII,
 }
 
 func testNewStep() {
@@ -34,20 +35,31 @@ func testNewStep() {
         log.Fatalf("Invalid Setup() with %#v", rotors)
     }
 
-    e.SetRotorSettings([]int{20, 0,0})
+	fmt.Println("---- single step")
+    e.SetRotorSettings([]int{0, 0, 20})
+	// should have [rI/0, rII/0, rIII/20]
     e.DumpState(false)
     e.DumpIndex()
+	fmt.Println("----")
     e.NewStep()
     e.DumpIndex()
     e.NewStep()
     e.DumpIndex()
     e.NewStep()
     e.DumpIndex()
-    e.NewStep()
-    e.DumpIndex()
-    e.NewStep()
-    e.DumpIndex()
-    e.NewStep()
+
+	fmt.Println("----- double step")
+	e.SetRotorSettings([]int{0, 3, 20})
+	e.DumpIndex()
+	fmt.Println("----")
+	e.NewStep()
+	e.DumpIndex()
+	e.NewStep()
+	e.DumpIndex()
+	e.NewStep()
+	e.DumpIndex()
+	e.NewStep()
+	e.DumpIndex()
 }
 
 func main() {
