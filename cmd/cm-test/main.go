@@ -8,10 +8,10 @@ import (
 
 const (
 	//      ABCDEFGHIJKLMNOPQRSTUVWXYZ
-	rI   = "EKMFLGDQVZNTOWYHX/USPAIBRCJ"
-	rII  = "AJDKS/IRUXBLHWTMCQGZNPYFVOE"
-	rIII = "BDFHJLCPRTXVZNYEIWGAKM/USQO"
-	rIV  = "ESOVPZJAYQ/UIRHXLNFTGKDCMWB"
+	rI   = "EKMFLGDQVZNTOWYH/XUSPAIBRCJ"
+	rII  = "AJDK/SIRUXBLHWTMCQGZNPYFVOE"
+	rIII = "BDFHJLCPRTXVZNYEIWGAK/MUSQO"
+	rIV  = "ESOVPZJAY/QUIRHXLNFTGKDCMWB"
 	rV   = "VZBRGITYUPSDNHLXAWMJQOFECK/"
 	rVI  = "JPGVOUMFYQBENHZRDKASXLICTW/" // special, has notch in M too
 
@@ -41,24 +41,24 @@ func testNewStep() {
 	e.DumpState(false)
 	e.DumpIndex()
 	fmt.Println("----")
-	e.NewStep()
+	e.NewStep()		// normal step
 	e.DumpIndex()
-	e.NewStep()
+	e.NewStep()		// notch reached
 	e.DumpIndex()
-	e.NewStep()
+	e.NewStep()		// normal step
 	e.DumpIndex()
 
 	fmt.Println("----- double step")
 	e.SetRotorSettings([]int{0, 3, 20})
 	e.DumpIndex()
 	fmt.Println("----")
-	e.NewStep()
+	e.NewStep()		// normal step
 	e.DumpIndex()
-	e.NewStep()
+	e.NewStep()		// right-most step
 	e.DumpIndex()
-	e.NewStep()
+	e.NewStep()		// left-most will step and middle is double step
 	e.DumpIndex()
-	e.NewStep()
+	e.NewStep()		// normal step
 	e.DumpIndex()
 }
 
