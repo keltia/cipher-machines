@@ -47,31 +47,6 @@ type Enigma struct {
 
 // Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
 // the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
-func (m *Enigma) Step() *Enigma {
-	// Naive mode: do not have step at a specific place
-
-	var last = EnigmaStd - 1
-
-	// Loop unrolled, not worth abstracting the whole process
-	if len(m.RotorSet) == EnigmaMarine {
-		last = EnigmaMarine - 1
-	}
-
-	r0 := m.RotorSet[last]
-	r0.Step()
-	if r0.NotchHit() {
-		r1 := m.RotorSet[last-1]
-		r1.Step()
-		if r1.NotchHit() {
-			r2 := m.RotorSet[last-2]
-			r2.Step()
-		}
-	}
-	return m
-}
-
-// Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
-// the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
 // XXX assume single notch rotors
 func (m *Enigma) NewStep() *Enigma {
 	// New mode, take the notches into account
