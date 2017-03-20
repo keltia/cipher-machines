@@ -36,9 +36,9 @@ func TestEnigma_Setup(t *testing.T) {
     rrIII, _ := NewRotor(rIII, false)
 
     assert.NoError(t, err, "should be ok")
-    assert.EqualValues(t, e.RotorSet[0], rrI, "should be equal")
+    assert.EqualValues(t, e.RotorSet[2], rrI, "should be equal")
     assert.EqualValues(t, e.RotorSet[1], rrII, "should be equal")
-    assert.EqualValues(t, e.RotorSet[2], rrIII, "should be equal")
+    assert.EqualValues(t, e.RotorSet[0], rrIII, "should be equal")
 
     assert.Nil(t, e.PlugBoard, "should be nil")
     assert.Nil(t, e.Reflector, "should be nil")
@@ -50,7 +50,7 @@ func TestEnigma_Setup(t *testing.T) {
     rotors[0] = rVI
     err = e.Setup(rotors)
     rrVI, _ := NewRotor(rVI, false)
-    assert.EqualValues(t, e.RotorSet[0], rrVI, "should be equal")
+    assert.EqualValues(t, e.RotorSet[2], rrVI, "should be equal")
     assert.NoError(t, err, "should not be in error")
 
     rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
