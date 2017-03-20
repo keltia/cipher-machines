@@ -74,7 +74,7 @@ func main() {
 		log.Fatalf("Invalid AddReflector() with %#v", RfB)
 	}
 
-	e.SetPlugboard(PBS)
+	//e.SetPlugboard(PBS)
 	e.DumpState(true)
 
 	plain := "AAAAA"
