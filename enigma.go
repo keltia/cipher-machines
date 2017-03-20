@@ -197,14 +197,16 @@ func (m *Enigma) Encrypt(text string) (cipher string) {
 	for tok != scanner.EOF {
 		tok = s.Next()
 		p := textToInt[string(tok)]
-		fmt.Printf("plain: %d", p)
+		fmt.Printf("plain: %s", intToText[p])
 
-		// Dive into the rotors
+        // Stepping is done before current goes through
+        m.Step()
+
+        // Dive into the rotors
 		c := intToText[m.Out(p)]
 
 		fmt.Printf(" - cipher: %s\n", c)
 		str.WriteString(c)
-		m.Step()
 	}
 	cipher = str.String()
 	return
