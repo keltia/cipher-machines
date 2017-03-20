@@ -33,9 +33,8 @@ func (r *Rotor) Start(index int) (err error) {
 }
 
 func (r *Rotor) turn(index int) (ret int, wrap bool) {
-	prev := index
 	index = (index + 1) % r.size
-	if index < prev {
+	if index == r.notch {
 		wrap = true
 	}
 	return index, wrap
@@ -52,7 +51,6 @@ func (r *Rotor) Step() int {
 	}
 	r.index, r.wrap = r.turn(r.index)
 	r.Rotate()
-	r.notch, _ = r.turn(r.notch)
     return r.index
 }
 

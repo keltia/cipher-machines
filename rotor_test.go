@@ -163,29 +163,17 @@ func TestRotor_Step_Refl(t *testing.T) {
 	assert.EqualValues(t, r.index, r1.index, "index is invariant for reflectors")
 }
 
-func TestRotor_Step26(t *testing.T) {
-	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
-
-	for _, _ = range r.rotor {
-		r.Step()
-	}
-	assert.EqualValues(t, r.HasWrapped(), true, "should be true")
-	r.Step()
-	assert.EqualValues(t, r.HasWrapped(), false, "should be false")
-}
-
 func TestRotor_HasWrapped(t *testing.T) {
 	r, err := NewRotor(rI, false)
 	assert.NoError(t, err,"should be no error")
 
 	r.Start(3)
 	r.Step()
-	assert.EqualValues(t, r.HasWrapped(), false, "should be false")
+	assert.EqualValues(t,  false, r.HasWrapped(),"should be false")
 
-	r.Start(25)
+	r.Start(r.notch - 1)
 	r.Step()
-	assert.EqualValues(t, r.HasWrapped(), true, "should be true")
+	assert.EqualValues(t,  true, r.HasWrapped(),"should be true")
 }
 
 func TestRotor_In(t *testing.T) {
