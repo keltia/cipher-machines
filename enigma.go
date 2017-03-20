@@ -42,6 +42,9 @@ type Enigma struct {
 	Size      int         // number of rotors
 }
 
+// RotorSet is an array starting at 0 BUT the rotors are numbered the reverse way:
+// ([r3]) [r2] [r1] [r0]
+
 // Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
 // the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
 func (m *Enigma) Step() *Enigma {
@@ -74,14 +77,15 @@ func (m *Enigma) NewStep() *Enigma {
 	// New mode, take the notches into account
 
 	// if this is a 4-wheel machine, the foremost one (aka the 4th) does not move.
-	r0 := m.RotorSet[0]
+	r0 := m.RotorSet[2]
 	r1 := m.RotorSet[1]
-	r2 := m.RotorSet[2]
+	r2 := m.RotorSet[0]
 
+	// [r2, r1, r0]
 	r0.Step()
-	if r0.index == r1.notch {
+	if r0.index == r0.notch {
 		r1.Step()
-		if r1.index == r2.notch {
+		if r1.index == r1.notch {
 			r2.Step()
 		}
 	}
@@ -107,6 +111,7 @@ func (m *Enigma) Setup(rotors []string) (err error) {
 
 	m.RotorSet = make([]*Rotor, m.Size)
 
+	// Reverse insert rotors
 	for i, r := range rotors {
 		if len(r) != RotorSize+1 {
 			return fmt.Errorf("bad length %d should be 26", len(r))
@@ -114,12 +119,12 @@ func (m *Enigma) Setup(rotors []string) (err error) {
 		m.RotorSet[i], err = NewRotor(r, false)
 		//log.Printf("%v\n", m.RotorSet[i])
 	}
-	return nil
+	return
 }
 
 func (m *Enigma) AddReflector(ref string) (err error) {
 	m.Reflector, err = NewRotor(ref, true)
-	return err
+	return
 }
 
 func (m *Enigma) SetPlugboard(plug string) error {
@@ -242,15 +247,20 @@ func (m *Enigma) DumpState(t bool) {
 }
 
 func (m *Enigma) DumpIndex() {
-	var ri3 string
+	var (
+		off int
+		ri3 string
+	)
 
 	if m.Size == EnigmaMarine {
-		ri3 = intToText[m.RotorSet[3].index]
+		ri3 = intToText[m.RotorSet[0].index]
+		off = 1
 	} else {
 		ri3 = "-"
+		off = 0
 	}
-	ri2 := intToText[m.RotorSet[2].index]
-	ri1 := intToText[m.RotorSet[1].index]
-	ri0 := intToText[m.RotorSet[0].index]
+	ri2 := intToText[m.RotorSet[off].index]
+	ri1 := intToText[m.RotorSet[off + 1].index]
+	ri0 := intToText[m.RotorSet[off + 2].index]
 	fmt.Printf("%s%s%s%s\n", ri3, ri2, ri1, ri0)
 }

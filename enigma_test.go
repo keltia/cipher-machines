@@ -23,9 +23,9 @@ func TestNewEnigma(t *testing.T) {
 
 func TestEnigma_Setup(t *testing.T) {
     var rotors = []string{
-        rI,
-        rII,
         rIII,
+        rII,
+        rI,
     }
 
     e, _ := NewEnigma(3)
@@ -48,9 +48,12 @@ func TestEnigma_Setup(t *testing.T) {
     assert.Error(t, err, "should be in error")
 
     rotors[0] = rVI
+    // Now we have [rVI, rII, rI]
     err = e.Setup(rotors)
+
     rrVI, _ := NewRotor(rVI, false)
-    assert.EqualValues(t, e.RotorSet[2], rrVI, "should be equal")
+
+    assert.EqualValues(t, e.RotorSet[0], rrVI, "should be equal")
     assert.NoError(t, err, "should not be in error")
 
     rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
@@ -60,13 +63,14 @@ func TestEnigma_Setup(t *testing.T) {
 }
 
 func TestEnigma_SetRotorSettings(t *testing.T) {
+    // [rIII, rII, rI]
     var rotors = []string{
-        rI,
-        rII,
         rIII,
+        rII,
+        rI,
     }
 
-    var set = []int{ 1, 4, 2}
+    var set = []int{1, 4, 2}
 
     e, _ := NewEnigma(3)
     assert.Panics(t, func() {
@@ -79,9 +83,9 @@ func TestEnigma_SetRotorSettings(t *testing.T) {
     }
     e.SetPlugboard(PBS)
     e.AddReflector(RfB)
-
     e.SetRotorSettings(set)
 
+    // should have [rIII/1, rII/4, rI/2]
     assert.EqualValues(t, e.RotorSet[0].index, 1, "should be equal")
     assert.EqualValues(t, e.RotorSet[1].index, 4, "should be equal")
     assert.EqualValues(t, e.RotorSet[2].index, 2, "should be equal")
