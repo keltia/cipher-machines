@@ -59,10 +59,10 @@ func (m *Enigma) Step() *Enigma {
 
 	r0 := m.RotorSet[last]
 	r0.Step()
-	if r0.HasWrapped() {
+	if r0.NotchHit() {
 		r1 := m.RotorSet[last-1]
 		r1.Step()
-		if r1.HasWrapped() {
+		if r1.NotchHit() {
 			r2 := m.RotorSet[last-2]
 			r2.Step()
 		}
@@ -83,9 +83,10 @@ func (m *Enigma) NewStep() *Enigma {
 
 	// [r2, r1, r0]
 	r0.Step()
-	if r0.index == r0.notch {
+	if r0.NotchHit() {
 		r1.Step()
-		if r1.index == r1.notch {
+		// Check for double step
+		if r1.NotchHit() {
 			r2.Step()
 		}
 	}

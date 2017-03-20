@@ -167,11 +167,11 @@ func TestRotor_HasWrapped(t *testing.T) {
 
 	r.Start(3)
 	r.Step()
-	assert.EqualValues(t, false, r.HasWrapped(), "should be false")
+	assert.EqualValues(t, false, r.NotchHit(), "should be false")
 
 	r.Start(r.notch - 1)
 	r.Step()
-	assert.EqualValues(t, true, r.HasWrapped(), "should be true")
+	assert.EqualValues(t, true, r.NotchHit(), "should be true")
 }
 
 func TestRotor_In(t *testing.T) {

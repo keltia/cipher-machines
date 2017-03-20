@@ -80,7 +80,7 @@ func (r *Rotor) Rotate() {
 	r.rotor[length-1] = first
 }
 
-func (r *Rotor) HasWrapped() bool {
+func (r *Rotor) NotchHit() bool {
 	return r.wrap
 }
 
