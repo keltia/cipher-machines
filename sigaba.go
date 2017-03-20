@@ -1,8 +1,6 @@
 package machine
 
-import (
-
-)
+import ()
 
 type Sigaba struct {
 }
@@ -28,5 +26,3 @@ func (m *Sigaba) Decrypt(text string) (clear string) {
 func NewSigaba() (m *Sigaba, err error) {
 	return &Sigaba{}, nil
 }
-
-

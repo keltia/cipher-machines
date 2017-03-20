@@ -7,9 +7,9 @@ import (
 
 // -- Rotor
 type Rotor struct {
-    rotor []int
-    index int
-    size  int
+	rotor []int
+	index int
+	size  int
 	notch int
 	refl  bool
 	wrap  bool
@@ -24,7 +24,7 @@ func (r *Rotor) testIndex(index int) bool {
 
 func (r *Rotor) Start(index int) (err error) {
 	if r.testIndex(index) {
-    	r.index = index
+		r.index = index
 		err = nil
 	} else {
 		err = fmt.Errorf("index out of bounds")
@@ -51,20 +51,20 @@ func (r *Rotor) Step() int {
 	}
 	r.index, r.wrap = r.turn(r.index)
 	r.Rotate()
-    return r.index
+	return r.index
 }
 
 func (r *Rotor) Out(p int) (c int) {
-    return r.rotor[p]
+	return r.rotor[p]
 }
 
 func (r *Rotor) In(p int) (c int) {
-    for i, v := range r.rotor {
+	for i, v := range r.rotor {
 		if v == p {
-	    	return i
+			return i
 		}
-    }
-    return -1
+	}
+	return -1
 }
 
 func (r *Rotor) Rotate() {
@@ -74,10 +74,10 @@ func (r *Rotor) Rotate() {
 	}
 	first := r.rotor[0]
 	length := len(r.rotor)
-	for i := 0; i < length - 1; i++ {
-		r.rotor[i] = r.rotor[i + 1]
+	for i := 0; i < length-1; i++ {
+		r.rotor[i] = r.rotor[i+1]
 	}
-	r.rotor[length - 1] = first
+	r.rotor[length-1] = first
 }
 
 func (r *Rotor) HasWrapped() bool {
@@ -95,19 +95,19 @@ func NewRotor(str string, refl bool) (r *Rotor, err error) {
 	} else {
 		// Check for notches
 		if !strings.ContainsRune(str, '/') &&
-			len(str) != RotorSize + 1 {
+			len(str) != RotorSize+1 {
 			return &Rotor{}, fmt.Errorf("bad description for rtor: %s", str)
 		}
 	}
-    r = &Rotor{
-		size: RotorSize,
+	r = &Rotor{
+		size:  RotorSize,
 		rotor: make([]int, RotorSize),
-		refl: refl,
+		refl:  refl,
 	}
 
 	// Transform data
 	var i = 0
-    for _, c := range str {
+	for _, c := range str {
 		// Identify the notch that make the next rotor advance
 		if c == '/' {
 			r.notch = i
@@ -115,9 +115,7 @@ func NewRotor(str string, refl bool) (r *Rotor, err error) {
 			r.rotor[i] = textToInt[string(c)]
 			i++
 		}
-    }
+	}
 	err = nil
-    return
+	return
 }
-
-

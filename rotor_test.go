@@ -1,8 +1,8 @@
 package machine
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 const (
@@ -16,13 +16,13 @@ func TestNewRotor(t *testing.T) {
 
 	r, err := NewRotor(rI, false)
 
-	assert.NoError(t, err,"should be no error")
-	assert.EqualValues(t, r.size, len(rI) - 1, "they should be the same")
-	assert.EqualValues(t, len(r.rotor),len(rI) - 1, "they should be of the same length")
+	assert.NoError(t, err, "should be no error")
+	assert.EqualValues(t, r.size, len(rI)-1, "they should be the same")
+	assert.EqualValues(t, len(r.rotor), len(rI)-1, "they should be of the same length")
 	assert.EqualValues(t, r.refl, false, "should be false")
 
 	// What we want
-	arI := make([]int, len(rI) - 1)
+	arI := make([]int, len(rI)-1)
 	var i = 0
 	for _, v := range rI {
 		if string(v) == "/" {
@@ -50,16 +50,16 @@ func TestNewRotor(t *testing.T) {
 func TestNewRotor_Refl(t *testing.T) {
 	r, err := NewRotor(RfA, true)
 
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 	assert.NotNil(t, r, "r not null")
 	assert.EqualValues(t, r.size, len(RfA), "they should be the same")
-	assert.EqualValues(t, len(r.rotor),len(RfA), "they should be of the same length")
+	assert.EqualValues(t, len(r.rotor), len(RfA), "they should be of the same length")
 	assert.EqualValues(t, r.refl, true, "should be true")
 }
 
 func TestRotor_Start(t *testing.T) {
 	r1, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 	assert.EqualValues(t, r1.index, 0, "should be equal")
 
 	err = r1.Start(13)
@@ -73,10 +73,10 @@ func TestRotor_Start(t *testing.T) {
 
 func TestRotor_Rotate1(t *testing.T) {
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r1, err := NewRotor(rIr1, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r.Rotate()
 	assert.EqualValues(t, r, r1, "should be equal")
@@ -85,14 +85,13 @@ func TestRotor_Rotate1(t *testing.T) {
 
 func TestRotor_Rotate2(t *testing.T) {
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r1, err := NewRotor(rIr1, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r2, err := NewRotor(rIr2, false)
-	assert.NoError(t, err,"should be no error")
-
+	assert.NoError(t, err, "should be no error")
 
 	r.Rotate()
 	assert.EqualValues(t, r, r1, "should be equal")
@@ -108,7 +107,7 @@ func TestRotor_Rotate2(t *testing.T) {
 
 func TestRotor_Rotate_Refl(t *testing.T) {
 	r, err := NewRotor(RfA, true)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r1, err := NewRotor(RfA, true)
 	r.Rotate()
@@ -117,7 +116,7 @@ func TestRotor_Rotate_Refl(t *testing.T) {
 
 func TestRotor_Start1(t *testing.T) {
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r.Start(21)
 	assert.Equal(t, r.index, 21, "should be equal")
@@ -125,7 +124,7 @@ func TestRotor_Start1(t *testing.T) {
 
 func TestRotor_Start2(t *testing.T) {
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	_ = r.Start(21)
 	assert.Equal(t, r.index, 21, "should be equal")
@@ -133,18 +132,18 @@ func TestRotor_Start2(t *testing.T) {
 
 func TestRotor_Start_OOB(t *testing.T) {
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	err = r.Start(42)
-	assert.Error(t, err,"index out of bounds")
+	assert.Error(t, err, "index out of bounds")
 }
 
 func TestRotor_Step(t *testing.T) {
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r1, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r.Step()
 	r1i := (r1.index + 1) % r1.size
@@ -153,11 +152,10 @@ func TestRotor_Step(t *testing.T) {
 
 func TestRotor_Step_Refl(t *testing.T) {
 	r, err := NewRotor(RfA, true)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r1, err := NewRotor(RfA, true)
-	assert.NoError(t, err,"should be no error")
-
+	assert.NoError(t, err, "should be no error")
 
 	r.Step()
 	assert.EqualValues(t, r.index, r1.index, "index is invariant for reflectors")
@@ -165,21 +163,21 @@ func TestRotor_Step_Refl(t *testing.T) {
 
 func TestRotor_HasWrapped(t *testing.T) {
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	r.Start(3)
 	r.Step()
-	assert.EqualValues(t,  false, r.HasWrapped(),"should be false")
+	assert.EqualValues(t, false, r.HasWrapped(), "should be false")
 
 	r.Start(r.notch - 1)
 	r.Step()
-	assert.EqualValues(t,  true, r.HasWrapped(),"should be true")
+	assert.EqualValues(t, true, r.HasWrapped(), "should be true")
 }
 
 func TestRotor_In(t *testing.T) {
 	// EKMFLGDQVZNTOWYHXUSPAIBRCJ
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	v := r.In(textToInt["E"])
 	assert.EqualValues(t, v, textToInt["A"], "should be equal")
@@ -194,7 +192,7 @@ func TestRotor_In(t *testing.T) {
 func TestRotor_Out(t *testing.T) {
 	// EKMFLGDQVZNTOWYHXUSPAIBRCJ
 	r, err := NewRotor(rI, false)
-	assert.NoError(t, err,"should be no error")
+	assert.NoError(t, err, "should be no error")
 
 	v := r.Out(textToInt["A"])
 	assert.EqualValues(t, v, textToInt["E"], "should be equal")
@@ -202,4 +200,3 @@ func TestRotor_Out(t *testing.T) {
 	v = r.Out(textToInt["A"])
 	assert.EqualValues(t, v, textToInt["K"], "should be equal")
 }
-

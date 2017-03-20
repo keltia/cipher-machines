@@ -260,7 +260,7 @@ func (m *Enigma) DumpIndex() {
 		off = 0
 	}
 	ri2 := intToText[m.RotorSet[off].index]
-	ri1 := intToText[m.RotorSet[off + 1].index]
-	ri0 := intToText[m.RotorSet[off + 2].index]
+	ri1 := intToText[m.RotorSet[off+1].index]
+	ri0 := intToText[m.RotorSet[off+2].index]
 	fmt.Printf("%s%s%s%s\n", ri3, ri2, ri1, ri0)
 }
