@@ -57,11 +57,14 @@ func (m *Enigma) Step() *Enigma {
 	r2 := m.RotorSet[0]
 
 	// [r2, r1, r0]
+    n0 := r0.NotchHit()
 	r0.Step()
-	if r0.NotchHit() {
-		r1.Step()
+	if n0 {
 		// Check for double step
-		if r1.NotchHit() {
+        r1.Step()
+        n1 := r1.NotchHit()
+		if n1 {
+            r1.Step()
 			r2.Step()
 		}
 	}
