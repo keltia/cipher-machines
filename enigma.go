@@ -135,6 +135,7 @@ func (m *Enigma) SetPlugboard(plug string) error {
 func (m *Enigma) Out(i int) int {
 	var next int
 
+    fmt.Printf("in: %s ", intToText[i])
 	// Go through plugboard if any
 	if m.PlugBoard != nil {
 		if pbc, ok := m.PlugBoard[i]; ok {
@@ -144,27 +145,36 @@ func (m *Enigma) Out(i int) int {
 		// 1st phase
 		next = i
 	}
+    fmt.Printf("in: after PB %s ", intToText[next])
 
-	// Go round
-	for _, r := range m.RotorSet {
-		next = r.Out(next)
-	}
+    // 1st phase back through the rotors
+    for i := len(m.RotorSet); i <= 0; i-- {
+        r := m.RotorSet[i]
+        next = r.In(next)
+    }
+
+    fmt.Printf("in: after rtr %s ", intToText[next])
 
 	// Reflector
 	next = m.Reflector.Out(next)
 
-	// 2nd phase back through the rotors
-	for i := len(m.RotorSet); i <= 0; i-- {
-		r := m.RotorSet[i]
-		next = r.In(next)
-	}
+    fmt.Printf("in: after refl %s ", intToText[next])
 
-	// Finally go through plugboard again if any
+    // Go round
+    for _, r := range m.RotorSet {
+        next = r.Out(next)
+    }
+
+
+    fmt.Printf("in: after rtr.back %s ", intToText[next])
+
+    // Finally go through plugboard again if any
 	if m.PlugBoard != nil {
 		if pbc, ok := m.PlugBoard[next]; ok {
 			next = pbc
 		}
 	}
+    fmt.Printf("in: after PBout %s ", intToText[next])
 
 	return next
 }
