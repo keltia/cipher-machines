@@ -18,3 +18,7 @@ tests:	$(TESTS)
 push:
 	git push --all
 	git push --tags
+
+clean:
+	go clean
+	rm -f cm-test
