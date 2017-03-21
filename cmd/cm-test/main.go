@@ -29,7 +29,7 @@ var rotors = []string{
 }
 
 func testNewStep() {
-	e, _ := machine.NewEnigma(3)
+	e, _ := machine.NewEnigma(machine.EnigmaStd)
 	err := e.Setup(rotors)
 	if err != nil {
 		log.Fatalf("Invalid Setup() with %#v-- %v", rotors, err)
@@ -69,7 +69,7 @@ func testNewStep() {
 }
 
 func main() {
-	e, _ := machine.NewEnigma(3)
+	e, _ := machine.NewEnigma(machine.EnigmaStd)
 	err := e.Setup(rotors)
 	if err != nil {
 		log.Fatalf("Invalid Setup() with %#v: %v", rotors, err)
