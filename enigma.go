@@ -38,12 +38,12 @@ const (
 // Enigma
 type Enigma struct {
 	PlugBoard map[int]int // plugboard settings
-	RotorSet  []*Rotor    // rotor set (3-4)
+	RS        *RotorSet    // rotor set (3-4)
 	Reflector *Rotor      // Enigma specific
 	Size      int         // number of rotors
 }
 
-// RotorSet is an array starting at 0 BUT the rotors are numbered the reverse way:
+// RS is an array starting at 0 BUT the rotors are numbered the reverse way:
 // ([r3]) [r2] [r1] [r0]
 
 // Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
