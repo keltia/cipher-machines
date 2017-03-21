@@ -46,42 +46,18 @@ type Enigma struct {
 // RS is an array starting at 0 BUT the rotors are numbered the reverse way:
 // ([r3]) [r2] [r1] [r0]
 
-// Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
-// the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
-// XXX assume single notch rotors
-func (m *Enigma) Step() *Enigma {
-	// New mode, take the notches into account
+func NewEnigma(size int) (m *Enigma, err error) {
+    if size != EnigmaStd && size != EnigmaMarine {
+        err = fmt.Errorf("wrong size %Double, should 3 or 4", size)
+        return
+    }
 
-	// if this is a 4-wheel machine, the foremost one (aka the 4th) does not move.
-	r0 := m.RotorSet[2]
-	r1 := m.RotorSet[1]
-	r2 := m.RotorSet[0]
-
-	// [r2, r1, r0]
-    n0 := r0.NotchHit()
-	r0.Step()
-	if n0 {
-		// Check for double step
-        r1.Step()
-        n1 := r1.NotchHit()
-		if n1 {
-            r1.Step()
-			r2.Step()
-		}
-	}
-	return m
+    m = &Enigma{
+        Size: size,
+    }
+    return
 }
 
-func (m *Enigma) SetRotorSettings(set []int) (err error) {
-	if len(set) != len(m.RotorSet) {
-		err = fmt.Errorf("Mismatch in rotors number: %d vs %d", len(set), len(m.RotorSet))
-	}
-	for i, v := range set {
-		m.RotorSet[i].Start(v)
-	}
-	err = nil
-	return
-}
 
 func (m *Enigma) Setup(rotors []string) (err error) {
 	// Only plain rotors, no reflector here
@@ -89,17 +65,20 @@ func (m *Enigma) Setup(rotors []string) (err error) {
 		return fmt.Errorf("Bad size: %d", len(rotors))
 	}
 
-	m.RotorSet = make([]*Rotor, m.Size)
-
-	// Reverse insert rotors
-	for i, r := range rotors {
-		if len(r) != RotorSize+1 {
-			return fmt.Errorf("bad length %d should be 26", len(r))
-		}
-		m.RotorSet[i], err = NewRotor(r, false)
-		//log.Printf("%v\n", m.RotorSet[i])
-	}
+	m.RS, err = NewRotorSet(rotors)
 	return
+}
+
+func (m *Enigma) SetRotorSettings(set []int) (err error) {
+    if len(set) != m.RS.Len {
+        err = fmt.Errorf("Mismatch in rotors number: %d vs %d", len(set), m.RS.Len)
+    }
+    err = m.RS.Set(set)
+    return
+}
+
+func (m *Enigma) Settings() (set []int) {
+    return m.RS.Settings()
 }
 
 func (m *Enigma) AddReflector(ref string) (err error) {
@@ -133,6 +112,15 @@ func (m *Enigma) SetPlugboard(plug string) error {
 	return nil
 }
 
+// Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
+// the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
+// XXX assume single notch rotors
+func (m *Enigma) Step() *Enigma {
+    // New mode, take the notches into account
+    m.RS.Step()
+    return m
+}
+
 func (m *Enigma) Out(i int) int {
 	var next int
 
@@ -146,28 +134,21 @@ func (m *Enigma) Out(i int) int {
 		// 1st phase
 		next = i
 	}
-    fmt.Printf("in: after PB %s ", intToText[next])
+    fmt.Printf("after PB(%s) ", intToText[next])
 
     // 1st phase back through the rotors
-    for i := len(m.RotorSet); i <= 0; i-- {
-        r := m.RotorSet[i]
-        next = r.In(next)
-    }
+    next = m.RS.left(next)
 
-    fmt.Printf("in: after rtr %s ", intToText[next])
+    fmt.Printf("after rtr(%s) ", intToText[next])
 
 	// Reflector
 	next = m.Reflector.Out(next)
 
-    fmt.Printf("in: after refl %s ", intToText[next])
+    fmt.Printf("after refl(%s) ", intToText[next])
 
-    // Go round
-    for _, r := range m.RotorSet {
-        next = r.Out(next)
-    }
+    next = m.RS.right(next)
 
-
-    fmt.Printf("in: after rtr.back %s ", intToText[next])
+    fmt.Printf("after rtr.back(%s) ", intToText[next])
 
     // Finally go through plugboard again if any
 	if m.PlugBoard != nil {
@@ -175,7 +156,7 @@ func (m *Enigma) Out(i int) int {
 			next = pbc
 		}
 	}
-    fmt.Printf("in: after PBout %s ", intToText[next])
+    fmt.Printf("after PBout(%s) ", intToText[next])
 
 	return next
 }
@@ -217,42 +198,15 @@ func (m *Enigma) Decrypt(text string) (clear string) {
 	return
 }
 
-func NewEnigma(size int) (m *Enigma, err error) {
-	if size != EnigmaStd && size != EnigmaMarine {
-		err = fmt.Errorf("wrong size %d, should 3 or 4", size)
-		return
-	}
-
-	m = &Enigma{
-		Size: size,
-	}
-	return
-}
-
 func (m *Enigma) DumpState(t bool) {
 	if t {
 		fmt.Printf("PB: %#v\nRefl: %#v\n", m.PlugBoard, m.Reflector)
 	}
-	if m.RotorSet != nil {
-		fmt.Printf("r0: %#v\nr1: %#v\nr2: %##v\n-----\n", m.RotorSet[0], m.RotorSet[1], m.RotorSet[2])
+	if m.RS != nil {
+		fmt.Printf("rs: %#v\n%#v\n%#v\n-----\n", m.RS.R[0], m.RS.R[1], m.RS.R[2])
 	}
 }
 
 func (m *Enigma) DumpIndex() {
-	var (
-		off int
-		ri3 string
-	)
-
-	if m.Size == EnigmaMarine {
-		ri3 = intToText[m.RotorSet[0].index]
-		off = 1
-	} else {
-		ri3 = "-"
-		off = 0
-	}
-	ri2 := intToText[m.RotorSet[off].index]
-	ri1 := intToText[m.RotorSet[off+1].index]
-	ri0 := intToText[m.RotorSet[off+2].index]
-	fmt.Printf("%s%s%s%s\n", ri3, ri2, ri1, ri0)
+	fmt.Printf("%s\n", m.RS.Index())
 }
