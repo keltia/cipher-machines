@@ -1,7 +1,5 @@
 package machine
 
-import ()
-
 type Machine interface {
 	Step()
 	Setup() error
