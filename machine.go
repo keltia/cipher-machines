@@ -4,7 +4,6 @@ import ()
 
 type Machine interface {
 	Step()
-	Index()
 	Setup() error
 	Encrypt(str string) string
 	Decrypt(str string) string
