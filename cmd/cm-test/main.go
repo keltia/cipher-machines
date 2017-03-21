@@ -32,13 +32,16 @@ func testNewStep() {
 	e, _ := machine.NewEnigma(3)
 	err := e.Setup(rotors)
 	if err != nil {
-		log.Fatalf("Invalid Setup() with %#v", rotors)
+		log.Fatalf("Invalid Setup() with %#v-- %v", rotors, err)
 	}
 
 	fmt.Println("---- single step")
-	e.SetRotorSettings([]int{0, 0, 20})
+	err = e.SetRotorSettings([]int{0, 0, 20})
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
 	// should have [rI/0, rII/0, rIII/20]
-	e.DumpState(false)
+	e.DumpState(true)
 	e.DumpIndex()
 	fmt.Println("----")
 	e.Step() // normal step
@@ -49,7 +52,10 @@ func testNewStep() {
 	e.DumpIndex()
 
 	fmt.Println("----- double step")
-	e.SetRotorSettings([]int{0, 3, 20})
+	err = e.SetRotorSettings([]int{0, 3, 20})
+	if err != nil {
+		log.Fatalf("error: %v", err)
+	}
 	e.DumpIndex()
 	fmt.Println("----")
 	e.Step() // normal step
@@ -66,7 +72,7 @@ func main() {
 	e, _ := machine.NewEnigma(3)
 	err := e.Setup(rotors)
 	if err != nil {
-		log.Fatalf("Invalid Setup() with %#v", rotors)
+		log.Fatalf("Invalid Setup() with %#v: %v", rotors, err)
 	}
 
 	err = e.AddReflector(RfB)
