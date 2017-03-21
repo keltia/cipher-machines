@@ -40,18 +40,18 @@ func TestNewRotor(t *testing.T) {
 
 	r, err = NewRotor("KJKJK", false)
 	assert.Error(t, err, "should be error")
-	assert.NotNil(t, r, "r not null")
+	assert.NotNil(t, r, "R not null")
 
 	r, err = NewRotor("KJKJK", true)
 	assert.Error(t, err, "should be error")
-	assert.NotNil(t, r, "r not null")
+	assert.NotNil(t, r, "R not null")
 }
 
 func TestNewRotor_Refl(t *testing.T) {
 	r, err := NewRotor(RfA, true)
 
 	assert.NoError(t, err, "should be no error")
-	assert.NotNil(t, r, "r not null")
+	assert.NotNil(t, r, "R not null")
 	assert.EqualValues(t, r.size, len(RfA), "they should be the same")
 	assert.EqualValues(t, len(r.rotor), len(RfA), "they should be of the same length")
 	assert.EqualValues(t, r.refl, true, "should be true")
@@ -150,6 +150,18 @@ func TestRotor_Step(t *testing.T) {
 	assert.EqualValues(t, r.index, r1i, "index is +1 mod size")
 }
 
+func TestRotor_Step_Wrap(t *testing.T) {
+	r, err := NewRotor(rI, false)
+	assert.NoError(t, err, "should be no error")
+
+
+	r.index = r.notch - 1
+	r.Step()
+	assert.EqualValues(t, true, r.wrap, "index = notch")
+	r.Step()
+	assert.EqualValues(t, false, r.wrap, "index = notch")
+}
+
 func TestRotor_Step_Refl(t *testing.T) {
 	r, err := NewRotor(RfA, true)
 	assert.NoError(t, err, "should be no error")
@@ -159,6 +171,18 @@ func TestRotor_Step_Refl(t *testing.T) {
 
 	r.Step()
 	assert.EqualValues(t, r.index, r1.index, "index is invariant for reflectors")
+}
+
+func TestRotor_Step_Refl_RT(t *testing.T) {
+	r, err := NewRotor(RfB, true)
+	assert.NoError(t, err, "should be no error")
+
+	p := textToInt["J"]
+	c := intToText[r.Out(p)]
+	assert.EqualValues(t, "X", c, "should be equal")
+
+	d := r.Out(textToInt[c])
+	assert.EqualValues(t, p, d, "should be equal")
 }
 
 func TestRotor_HasWrapped(t *testing.T) {
@@ -180,13 +204,33 @@ func TestRotor_In(t *testing.T) {
 	assert.NoError(t, err, "should be no error")
 
 	v := r.In(textToInt["E"])
-	assert.EqualValues(t, v, textToInt["A"], "should be equal")
+	assert.EqualValues(t, textToInt["A"], v, "should be equal")
+
+	v = r.In(textToInt["A"])
+	assert.EqualValues(t, textToInt["U"], v, "should be equal")
+
 	r.Step()
 	v = r.In(textToInt["K"])
-	assert.EqualValues(t, v, textToInt["A"], "should be equal")
+	assert.EqualValues(t, textToInt["A"], v, "should be equal")
+
+	v = r.In(textToInt["A"])
+	assert.EqualValues(t, textToInt["T"], v, "should be equal")
 
 	v = r.In(666)
-	assert.EqualValues(t, v, -1, "should be equal")
+	assert.EqualValues(t, -1, v, "should be equal")
+}
+
+func TestRotor_InRefl(t *testing.T) {
+	r, err := NewRotor(RfB, true)
+	assert.NoError(t, err, "should be no error")
+
+	v := r.Out(textToInt["A"])
+	p := intToText[r.Out(v)]
+	assert.EqualValues(t, "A", p, "should be equal")
+
+	v = r.In(textToInt["A"])
+	p = intToText[r.In(v)]
+	assert.EqualValues(t, "A", p, "should be equal")
 }
 
 func TestRotor_Out(t *testing.T) {
