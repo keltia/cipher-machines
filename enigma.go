@@ -115,10 +115,9 @@ func (m *Enigma) SetPlugboard(plug string) error {
 // Step makes the rotors turn.  At some point, the 2nd can step as well, which can trigger
 // the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
 // XXX assume single notch rotors
-func (m *Enigma) Step() *Enigma {
+func (m *Enigma) Step() {
     // New mode, take the notches into account
     m.RS.Step()
-    return m
 }
 
 func (m *Enigma) Out(i int) int {
