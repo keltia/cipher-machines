@@ -48,7 +48,7 @@ type Enigma struct {
 
 func NewEnigma(size int) (m *Enigma, err error) {
 	if size != EnigmaStd && size != EnigmaMarine {
-		err = fmt.Errorf("wrong size %Double, should 3 or 4", size)
+		err = fmt.Errorf("wrong size %d, should 3 or 4", size)
 		return
 	}
 

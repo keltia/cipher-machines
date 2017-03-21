@@ -60,7 +60,7 @@ func (rs *RotorSet) Step() {
 func (rs *RotorSet) Set(init []int) (err error) {
 
 	if rs.Len != len(init) {
-		err = fmt.Errorf("incorrect settings for rotors")
+		err = fmt.Errorf("incorrect settings for rotors %v", init)
 	} else {
 		for i, s := range init {
 			rs.R[i].index = s
