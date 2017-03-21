@@ -30,9 +30,9 @@ func TestEnigma_Setup(t *testing.T) {
 
 	e, _ := NewEnigma(3)
 	err := e.Setup(rotors)
-    if err != nil {
-        t.Errorf("error running .Setup(), err=%v", err)
-    }
+	if err != nil {
+		t.Errorf("error running .Setup(), err=%v", err)
+	}
 
 	rrI, err := NewRotor(rI, false)
 	rrII, _ := NewRotor(rII, false)
@@ -40,7 +40,7 @@ func TestEnigma_Setup(t *testing.T) {
 
 	assert.NoError(t, err, "should be ok")
 	assert.EqualValues(t, rrI, e.RS.R[2], "should be equal")
-	assert.EqualValues(t, rrII, e.RS.R[1],  "should be equal")
+	assert.EqualValues(t, rrII, e.RS.R[1], "should be equal")
 	assert.EqualValues(t, rrIII, e.RS.R[0], "should be equal")
 
 	assert.Nil(t, e.PlugBoard, "should be nil")
@@ -48,53 +48,53 @@ func TestEnigma_Setup(t *testing.T) {
 }
 
 func TestEnigma_Setup_Badlen(t *testing.T) {
-    var rotors = []string{
-        "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH",
-        rII,
-        rI,
-    }
+	var rotors = []string{
+		"JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH",
+		rII,
+		rI,
+	}
 
-    e, _ := NewEnigma(3)
-    err := e.Setup(rotors)
+	e, _ := NewEnigma(3)
+	err := e.Setup(rotors)
 
-    err = e.Setup(rotors)
-    assert.Error(t, err, "should be in error")
+	err = e.Setup(rotors)
+	assert.Error(t, err, "should be in error")
 }
 
 func TestEnigma_Setup_Chgrotor(t *testing.T) {
-    var rotors = []string{
-        rVI,
-        rII,
-        rI,
-    }
+	var rotors = []string{
+		rVI,
+		rII,
+		rI,
+	}
 
-    e, _ := NewEnigma(3)
-    // Now we have [rVI, rII, rI]
-    err := e.Setup(rotors)
+	e, _ := NewEnigma(3)
+	// Now we have [rVI, rII, rI]
+	err := e.Setup(rotors)
 
-    rrVI, _ := NewRotor(rVI, false)
+	rrVI, _ := NewRotor(rVI, false)
 
-    assert.EqualValues(t, e.RS.R[0], rrVI, "should be equal")
-    assert.NoError(t, err, "should not be in error")
+	assert.EqualValues(t, e.RS.R[0], rrVI, "should be equal")
+	assert.NoError(t, err, "should not be in error")
 
-    rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
-    err = e.Setup(rotors)
-    assert.Error(t, err, "should be in error")
+	rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
+	err = e.Setup(rotors)
+	assert.Error(t, err, "should be in error")
 
 }
 
 func TestEnigma_Setup_Fourrotor(t *testing.T) {
-    var rotors = []string{
-        rVI,
-        rII,
-        rI,
-    }
+	var rotors = []string{
+		rVI,
+		rII,
+		rI,
+	}
 
-    e, _ := NewEnigma(3)
+	e, _ := NewEnigma(3)
 
-    rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
-    err := e.Setup(rotors)
-    assert.Error(t, err, "should be in error")
+	rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
+	err := e.Setup(rotors)
+	assert.Error(t, err, "should be in error")
 
 }
 
