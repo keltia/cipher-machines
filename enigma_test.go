@@ -6,13 +6,13 @@ import (
 )
 
 func TestNewEnigma(t *testing.T) {
-	e, err := NewEnigma(3)
+	e, err := NewEnigma(EnigmaStd)
 	assert.EqualValues(t, e.Size, 3, "should be equal")
 	assert.Nil(t, err, "no error")
 
-	e, err = NewEnigma(4)
+	e, err = NewEnigma(EnigmaMarine)
 	assert.Nil(t, err, "no error")
-	assert.EqualValues(t, 4, e.Size, "should be equal")
+	assert.EqualValues(t, EnigmaMarine, e.Size, "should be equal")
 
 	e, err = NewEnigma(666)
 	assert.Error(t, err, "should protest")
@@ -28,13 +28,10 @@ func TestEnigma_Setup(t *testing.T) {
 		rI,
 	}
 
-	e, _ := NewEnigma(3)
+	e, _ := NewEnigma(EnigmaStd)
 	err := e.Setup(rotors)
-	if err != nil {
-		t.Errorf("error running .Setup(), err=%v", err)
-	}
 
-	rrI, err := NewRotor(rI, false)
+	rrI, _ := NewRotor(rI, false)
 	rrII, _ := NewRotor(rII, false)
 	rrIII, _ := NewRotor(rIII, false)
 
@@ -54,10 +51,8 @@ func TestEnigma_Setup_Badlen(t *testing.T) {
 		rI,
 	}
 
-	e, _ := NewEnigma(3)
+	e, _ := NewEnigma(EnigmaStd)
 	err := e.Setup(rotors)
-
-	err = e.Setup(rotors)
 	assert.Error(t, err, "should be in error")
 }
 
@@ -68,10 +63,9 @@ func TestEnigma_Setup_Chgrotor(t *testing.T) {
 		rI,
 	}
 
-	e, _ := NewEnigma(3)
+	e, _ := NewEnigma(EnigmaStd)
 	// Now we have [rVI, rII, rI]
 	err := e.Setup(rotors)
-
 	rrVI, _ := NewRotor(rVI, false)
 
 	assert.EqualValues(t, e.RS.R[0], rrVI, "should be equal")
@@ -80,7 +74,6 @@ func TestEnigma_Setup_Chgrotor(t *testing.T) {
 	rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
 	err = e.Setup(rotors)
 	assert.Error(t, err, "should be in error")
-
 }
 
 func TestEnigma_Setup_Fourrotor(t *testing.T) {
@@ -90,12 +83,11 @@ func TestEnigma_Setup_Fourrotor(t *testing.T) {
 		rI,
 	}
 
-	e, _ := NewEnigma(3)
+	e, _ := NewEnigma(EnigmaStd)
 
 	rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
 	err := e.Setup(rotors)
 	assert.Error(t, err, "should be in error")
-
 }
 
 func TestEnigma_SetRotorSettings(t *testing.T) {
@@ -108,17 +100,20 @@ func TestEnigma_SetRotorSettings(t *testing.T) {
 
 	var set = []int{1, 4, 2}
 
-	e, _ := NewEnigma(3)
+	e, _ := NewEnigma(EnigmaStd)
 	assert.Panics(t, func() {
 		e.SetRotorSettings(set)
 	}, "should panic")
 
 	err := e.Setup(rotors)
-	if err != nil {
-		t.Error(err)
-	}
-	e.SetPlugboard(PBS)
-	e.AddReflector(RfB)
+	assert.NoError(t, err, "should not be in error")
+
+	err = e.SetPlugboard(PBS)
+	assert.NoError(t, err, "should not be in error")
+
+	err = e.AddReflector(RfB)
+	assert.NoError(t, err, "should not be in error")
+
 	e.SetRotorSettings(set)
 
 	// should have [rIII/1, rII/4, rI/2]
@@ -129,8 +124,9 @@ func TestEnigma_SetRotorSettings(t *testing.T) {
 
 func TestEnigma_SetPlugboard(t *testing.T) {
 
-	e, _ := NewEnigma(3)
-	e.SetPlugboard(PBS)
+	e, _ := NewEnigma(EnigmaStd)
+	err := e.SetPlugboard(PBS)
+	assert.NoError(t, err, "should not be in error")
 
 	realPBS := map[int]int{12: 19, 11: 20, 0: 16, 10: 22, 5: 23, 15: 18, 1: 3, 4: 9, 14: 24, 8: 21}
 
@@ -144,7 +140,7 @@ func TestEnigma_AddReflector(t *testing.T) {
 		rIII,
 	}
 
-	e, _ := NewEnigma(3)
+	e, _ := NewEnigma(EnigmaStd)
 	err := e.Setup(rotors)
 	assert.NoError(t, err, "no error")
 	assert.NotNil(t, e.RS, "rs not null")
