@@ -63,15 +63,10 @@ func TestEnigma_Setup_Chgrotor(t *testing.T) {
         rI,
     }
 
-    e, _ := NewEnigma(EnigmaStd)
-    // Now we have [rVI, rII, rI]
-    err := e.Setup(rotors)
-    rrVI, _ := NewRotor(rVI, false)
-
 	e, _ := NewEnigma(EnigmaStd)
 	// Now we have [rVI, rII, rI]
 	err := e.Setup(rotors)
-	rrVI, _ := NewRotor(rVI, false)
+	//rrVI, _ := NewRotor(rVI, false)
 
     rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
     err = e.Setup(rotors)
