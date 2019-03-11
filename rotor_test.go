@@ -154,7 +154,6 @@ func TestRotor_Step_Wrap(t *testing.T) {
 	r, err := NewRotor(rI, false)
 	assert.NoError(t, err, "should be no error")
 
-
 	r.index = r.notch - 1
 	r.Step()
 	assert.EqualValues(t, true, r.wrap, "index = notch")

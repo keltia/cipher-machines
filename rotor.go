@@ -27,7 +27,7 @@ func (r *Rotor) Start(index int) (err error) {
 		r.index = index
 		err = nil
 	} else {
-		err = fmt.Errorf("index out of bounds")
+		err = fmt.Errorf("index %d out of bounds", index)
 	}
 	return
 }

@@ -37,7 +37,7 @@ func TestEnigma_Setup(t *testing.T) {
 
 	assert.NoError(t, err, "should be ok")
 	assert.EqualValues(t, rrI, e.RS.R[2], "should be equal")
-	assert.EqualValues(t, rrII, e.RS.R[1],  "should be equal")
+	assert.EqualValues(t, rrII, e.RS.R[1], "should be equal")
 	assert.EqualValues(t, rrIII, e.RS.R[0], "should be equal")
 
 	assert.Nil(t, e.PlugBoard, "should be nil")
@@ -68,8 +68,10 @@ func TestEnigma_Setup_Chgrotor(t *testing.T) {
     err := e.Setup(rotors)
     rrVI, _ := NewRotor(rVI, false)
 
-    assert.EqualValues(t, e.RS.R[0], rrVI, "should be equal")
-    assert.NoError(t, err, "should not be in error")
+	e, _ := NewEnigma(EnigmaStd)
+	// Now we have [rVI, rII, rI]
+	err := e.Setup(rotors)
+	rrVI, _ := NewRotor(rVI, false)
 
     rotors = append(rotors, "JHJHSJDHJSHDKHDHKSHDKJSHDKJSHDKJHSKJDH")
     err = e.Setup(rotors)

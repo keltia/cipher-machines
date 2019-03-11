@@ -19,7 +19,7 @@ const (
 	rVI  = "JPGVOUMFYQBENHZRDKASXLICT/W" // special, has notch in M too
 
 	// Reflectors
-    //     ABCDEFGHIJKLMNOPQRSTUVWXYZ
+	//     ABCDEFGHIJKLMNOPQRSTUVWXYZ
 	RfA = "EJMZALYXVBWFCRQUONTSPIKHGD"
 	RfB = "YRUHQSLDPXNGOKMIEBFZCWVJAT"
 	RfC = "FVPJIAOYEDRZXWGCTKUQSBNMHL"
@@ -38,7 +38,7 @@ const (
 // Enigma
 type Enigma struct {
 	PlugBoard map[int]int // plugboard settings
-	RS        *RotorSet    // rotor set (3-4)
+	RS        *RotorSet   // rotor set (3-4)
 	Reflector *Rotor      // Enigma specific
 	Size      int         // number of rotors
 }
@@ -47,17 +47,16 @@ type Enigma struct {
 // ([r3]) [r2] [r1] [r0]
 
 func NewEnigma(size int) (m *Enigma, err error) {
-    if size != EnigmaStd && size != EnigmaMarine {
-        err = fmt.Errorf("wrong size %Double, should 3 or 4", size)
-        return
-    }
+	if size != EnigmaStd && size != EnigmaMarine {
+		err = fmt.Errorf("wrong size %d, should 3 or 4", size)
+		return
+	}
 
-    m = &Enigma{
-        Size: size,
-    }
-    return
+	m = &Enigma{
+		Size: size,
+	}
+	return
 }
-
 
 func (m *Enigma) Setup(rotors []string) (err error) {
 	// Only plain rotors, no reflector here
@@ -70,15 +69,15 @@ func (m *Enigma) Setup(rotors []string) (err error) {
 }
 
 func (m *Enigma) SetRotorSettings(set []int) (err error) {
-    if len(set) != m.RS.Len {
-        err = fmt.Errorf("Mismatch in rotors number: %d vs %d", len(set), m.RS.Len)
-    }
-    err = m.RS.Set(set)
-    return
+	if len(set) != m.RS.Len {
+		err = fmt.Errorf("Mismatch in rotors number: %d vs %d", len(set), m.RS.Len)
+	}
+	err = m.RS.Set(set)
+	return
 }
 
 func (m *Enigma) Settings() (set []int) {
-    return m.RS.Settings()
+	return m.RS.Settings()
 }
 
 func (m *Enigma) AddReflector(ref string) (err error) {
@@ -116,14 +115,14 @@ func (m *Enigma) SetPlugboard(plug string) error {
 // the 3rd one.  In the Kriegsmarine Enigma, the 4th rotor did not step.
 // XXX assume single notch rotors
 func (m *Enigma) Step() {
-    // New mode, take the notches into account
-    m.RS.Step()
+	// New mode, take the notches into account
+	m.RS.Step()
 }
 
 func (m *Enigma) Out(i int) int {
 	var next int
 
-    fmt.Printf("in: %s ", intToText[i])
+	fmt.Printf("in: %s ", intToText[i])
 	// Go through plugboard if any
 	if m.PlugBoard != nil {
 		if pbc, ok := m.PlugBoard[i]; ok {
@@ -133,29 +132,29 @@ func (m *Enigma) Out(i int) int {
 		// 1st phase
 		next = i
 	}
-    fmt.Printf("after PB(%s) ", intToText[next])
+	fmt.Printf("after PB(%s) ", intToText[next])
 
-    // 1st phase back through the rotors
-    next = m.RS.left(next)
+	// 1st phase back through the rotors
+	next = m.RS.left(next)
 
-    fmt.Printf("after rtr(%s) ", intToText[next])
+	fmt.Printf("after rtr(%s) ", intToText[next])
 
 	// Reflector
 	next = m.Reflector.Out(next)
 
-    fmt.Printf("after refl(%s) ", intToText[next])
+	fmt.Printf("after refl(%s) ", intToText[next])
 
-    next = m.RS.right(next)
+	next = m.RS.right(next)
 
-    fmt.Printf("after rtr.back(%s) ", intToText[next])
+	fmt.Printf("after rtr.back(%s) ", intToText[next])
 
-    // Finally go through plugboard again if any
+	// Finally go through plugboard again if any
 	if m.PlugBoard != nil {
 		if pbc, ok := m.PlugBoard[next]; ok {
 			next = pbc
 		}
 	}
-    fmt.Printf("after PBout(%s) ", intToText[next])
+	fmt.Printf("after PBout(%s) ", intToText[next])
 
 	return next
 }
@@ -180,10 +179,10 @@ func (m *Enigma) Encrypt(text string) (cipher string) {
 		p := textToInt[string(tok)]
 		fmt.Printf("plain: %s", intToText[p])
 
-        // Stepping is done before current goes through
-        m.Step()
+		// Stepping is done before current goes through
+		m.Step()
 
-        // Dive into the rotors
+		// Dive into the rotors
 		c := intToText[m.Out(p)]
 
 		fmt.Printf(" - cipher: %s\n", c)
